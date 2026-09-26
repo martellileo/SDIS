@@ -1,0 +1,253 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [4 0 R 6 0 R 8 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 1475 >>
+stream
+BT
+/F1 10 Tf
+50 770 Td
+(ESPECIFICACAO DO PROTOCOLO TCP CPF/CNPJ) Tj
+0 -16 Td
+(Versao 1 - 20/09/2026) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(1. Transporte e enquadramento) Tj
+0 -16 Td
+(O protocolo usa TCP sobre IPv4 ou IPv6, codificacao UTF-8 e mensagens JSON.) Tj
+0 -16 Td
+(Cada mensagem ocupa uma linha e termina com LF \(0x0A\). O servidor deve) Tj
+0 -16 Td
+(processar uma linha por vez e nunca concatenar respostas na mesma linha.) Tj
+0 -16 Td
+(Porta padrao: 5000. O cliente inicia a conexao TCP.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(2. Regras gerais) Tj
+0 -16 Td
+(- Todo objeto possui type. Mensagens de aplicacao usam version=1.) Tj
+0 -16 Td
+(- request_id e uma string opaca escolhida pelo emissor para correlacionar) Tj
+0 -16 Td
+(  requisicao e resposta. O servidor devolve o mesmo request_id.) Tj
+0 -16 Td
+(- Campos desconhecidos devem ser ignorados; campos obrigatorios ausentes) Tj
+0 -16 Td
+(  causam uma resposta error.) Tj
+0 -16 Td
+(- Valores podem conter pontuacao; a validacao remove todos os caracteres) Tj
+0 -16 Td
+(  nao numericos antes de aplicar o algoritmo.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(3. Abertura da sessao) Tj
+0 -16 Td
+(Cliente -> Servidor: {"type":"hello","version":1,"request_id":"id"}) Tj
+0 -16 Td
+(Servidor -> Cliente: {"type":"hello_ack","version":1,) Tj
+0 -16 Td
+(  "request_id":"id","service":"cpf-cnpj-validator"}) Tj
+0 -16 Td
+(A primeira mensagem deve ser hello. Versao diferente de 1 encerra a sessao) Tj
+0 -16 Td
+(apos error com code=UNSUPPORTED_VERSION.) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2041 >>
+stream
+BT
+/F1 10 Tf
+50 770 Td
+(4. Mensagens de validacao) Tj
+0 -16 Td
+(Cliente -> Servidor: {"type":"validate","version":1,) Tj
+0 -16 Td
+(  "request_id":"id","document_type":"CPF","value":"529.982.247-25"}) Tj
+0 -16 Td
+(document_type e obrigatoriamente CPF ou CNPJ; value e string.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(Servidor -> Cliente: {"type":"validation_result","version":1,) Tj
+0 -16 Td
+(  "request_id":"id","document_type":"CPF","value":"52998224725",) Tj
+0 -16 Td
+(  "valid":true,"message":"CPF valido"}) Tj
+0 -16 Td
+(value na resposta e o valor normalizado com somente digitos.) Tj
+0 -16 Td
+(valid=false significa documento sintaticamente processado, mas invalido.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(5. Encerramento e erros) Tj
+0 -16 Td
+(Cliente -> Servidor: {"type":"quit","version":1,"request_id":"id"}) Tj
+0 -16 Td
+(Servidor -> Cliente: {"type":"bye","version":1,"request_id":"id"}) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(Erro: {"type":"error","version":1,"request_id":"id-ou-null",) Tj
+0 -16 Td
+(  "code":"CODIGO","message":"descricao legivel"}) Tj
+0 -16 Td
+(Codigos: INVALID_JSON, INVALID_MESSAGE, INVALID_HELLO, HELLO_REQUIRED,) Tj
+0 -16 Td
+(UNSUPPORTED_VERSION, INVALID_REQUEST_ID, INVALID_VALIDATE,) Tj
+0 -16 Td
+(MESSAGE_TOO_LARGE e SERVER_BUSY.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(6. Concorrencia e protecao contra DoS) Tj
+0 -16 Td
+(O servidor cria uma thread por conexao aceita. O conjunto dinamico) Tj
+0 -16 Td
+(active_sockets associa um identificador a cada socket ativo e e protegido) Tj
+0 -16 Td
+(por lock. Um semaforo limitado controla max_connections \(padrao 32\).) Tj
+0 -16 Td
+(Quando o limite e atingido, o servidor envia SERVER_BUSY, fecha o socket) Tj
+0 -16 Td
+(e nao cria thread. Cada conexao tambem tem timeout de leitura de 30 segundos.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(7. Validacao) Tj
+0 -16 Td
+(CPF: 11 digitos, rejeicao de todos os digitos iguais e verificacao dos dois) Tj
+0 -16 Td
+(digitos de controle pelo modulo 11. CNPJ: 14 digitos, mesma rejeicao e) Tj
+0 -16 Td
+(pesos oficiais \(5,4,3,2,9,8,7,6,5,4,3,2 e 6,5,4,3,2,9,8,7,6,5,4,3,2\).) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 2135 >>
+stream
+BT
+/F1 10 Tf
+50 770 Td
+(8. Diagrama de estados finitos do protocolo) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(                  conecta) Tj
+0 -16 Td
+(                     |) Tj
+0 -16 Td
+(                     v) Tj
+0 -16 Td
+(              +---------------+) Tj
+0 -16 Td
+(              | AGUARDANDO    |) Tj
+0 -16 Td
+(              | HELLO         |) Tj
+0 -16 Td
+(              +---------------+) Tj
+0 -16 Td
+(               | hello valido       | erro/versao invalida) Tj
+0 -16 Td
+(               v                    v) Tj
+0 -16 Td
+(        +-------------+          +---------+) Tj
+0 -16 Td
+(        | PRONTO      |          | FECHADO |) Tj
+0 -16 Td
+(        +-------------+          +---------+) Tj
+0 -16 Td
+(          | validate       | quit) Tj
+0 -16 Td
+(          v                 v) Tj
+0 -16 Td
+(   +---------------+     +---------+) Tj
+0 -16 Td
+(   | VALIDANDO     |     | FECHADO |) Tj
+0 -16 Td
+(   +---------------+     +---------+) Tj
+0 -16 Td
+(          |) Tj
+0 -16 Td
+(          | validation_result ou error) Tj
+0 -16 Td
+(          +----------------------> PRONTO) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(Transicoes adicionais:) Tj
+0 -16 Td
+(- AGUARDANDO HELLO --HELLO_REQUIRED/INVALID_HELLO--> FECHADO.) Tj
+0 -16 Td
+(- PRONTO --mensagem desconhecida--> PRONTO \(responde UNKNOWN_MESSAGE_TYPE\).) Tj
+0 -16 Td
+(- Qualquer estado --EOF, timeout ou falha de socket--> FECHADO.) Tj
+0 -16 Td
+(- Listener sem vaga --nova conexao--> SERVER_BUSY e FECHADO.) Tj
+0 -16 Td
+() Tj
+0 -16 Td
+(9. Exemplo de sessao completa) Tj
+0 -16 Td
+(C> {"type":"hello","version":1,"request_id":"a"}) Tj
+0 -16 Td
+(S> {"type":"hello_ack","version":1,"request_id":"a",) Tj
+0 -16 Td
+(   "service":"cpf-cnpj-validator"}) Tj
+0 -16 Td
+(C> {"type":"validate","version":1,"request_id":"b",) Tj
+0 -16 Td
+(   "document_type":"CNPJ","value":"11.222.333/0001-81"}) Tj
+0 -16 Td
+(S> {"type":"validation_result","version":1,"request_id":"b",) Tj
+0 -16 Td
+(   "document_type":"CNPJ","value":"11222333000181",) Tj
+0 -16 Td
+(   "valid":true,"message":"CNPJ valido"}) Tj
+0 -16 Td
+(C> {"type":"quit","version":1,"request_id":"c"}) Tj
+0 -16 Td
+(S> {"type":"bye","version":1,"request_id":"c"}) Tj
+ET
+endstream
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000201 00000 n 
+0000000327 00000 n 
+0000001854 00000 n 
+0000001980 00000 n 
+0000004073 00000 n 
+0000004199 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+6386
+%%EOF
