@@ -23,6 +23,5 @@ O servidor mantém os sockets ativos em um dicionário dinâmico (`active_socket
 - `server.py`: servidor TCP multithread.
 - `cliente.java`: cliente TCP.
 - `protocolo-cpf-cnpj.pdf`: especificação normativa das mensagens, regras de validação e diagrama de estados.
-- `make_delivery.ps1`: recompila o cliente e cria `entrega-cpf-cnpj.zip`.
 
 O transporte usa TCP, UTF-8 e mensagens JSON delimitadas por LF (`\n`). Cada linha é uma mensagem independente. O PDF é a referência normativa para interoperabilidade.
