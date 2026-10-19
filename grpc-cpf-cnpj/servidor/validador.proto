@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package validador;
+
+service Validador {
+  rpc ValidarDocumento (DocumentoRequest) returns (DocumentoResponse);
+}
+
+message DocumentoRequest {
+  string document_type = 1; // "CPF" ou "CNPJ"
+  string value = 2;
+}
+
+message DocumentoResponse {
+  string cpf_cnpj = 1;
+  bool valid = 2;
+  string message = 3;
+}
