@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://sdis.ifsp.edu.br/validador"
+           xmlns:tns="http://sdis.ifsp.edu.br/validador"
+           elementFormDefault="qualified">
+
+  <xs:element name="ValidarDocumentoRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="document_type">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="CPF"/>
+              <xs:enumeration value="CNPJ"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+        <xs:element name="value" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ValidarDocumentoResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="cpf_cnpj" type="xs:string"/>
+        <xs:element name="valid" type="xs:boolean"/>
+        <xs:element name="message" type="xs:string"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

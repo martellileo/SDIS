@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="ValidadorService"
+             targetNamespace="http://sdis.ifsp.edu.br/validador"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://sdis.ifsp.edu.br/validador"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <types>
+    <xs:schema targetNamespace="http://sdis.ifsp.edu.br/validador">
+      <xs:include schemaLocation="validador.xsd"/>
+    </xs:schema>
+  </types>
+
+  <message name="ValidarDocumentoInput">
+    <part name="parameters" element="tns:ValidarDocumentoRequest"/>
+  </message>
+
+  <message name="ValidarDocumentoOutput">
+    <part name="parameters" element="tns:ValidarDocumentoResponse"/>
+  </message>
+
+  <portType name="ValidadorPortType">
+    <operation name="ValidarDocumento">
+      <input message="tns:ValidarDocumentoInput"/>
+      <output message="tns:ValidarDocumentoOutput"/>
+    </operation>
+  </portType>
+
+  <binding name="ValidadorSoapBinding" type="tns:ValidadorPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="ValidarDocumento">
+      <soap:operation soapAction="http://sdis.ifsp.edu.br/validador/ValidarDocumento"/>
+      <input><soap:body use="literal"/></input>
+      <output><soap:body use="literal"/></output>
+    </operation>
+  </binding>
+
+  <service name="ValidadorService">
+    <port name="ValidadorPort" binding="tns:ValidadorSoapBinding">
+      <soap:address location="http://localhost:8000/soap"/>
+    </port>
+  </service>
+
+</definitions>
