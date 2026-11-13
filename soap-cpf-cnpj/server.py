@@ -7,7 +7,7 @@ import types
 import urllib.parse
 from wsgiref.simple_server import make_server
 
-# Patch de compatibilidade do Spyne com versoes modernas do Python (PEP 451 / submodulos de six)
+# ?????
 _moves = types.ModuleType("spyne.util.six.moves")
 _moves.collections_abc = collections.abc
 _moves.http_cookies = http.cookies
