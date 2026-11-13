@@ -28,10 +28,10 @@ soap-cpf-cnpj/
 ## 1. Instalação das Dependências
 
 ### No Servidor (Python)
-Instale a biblioteca `lxml` (utilizada para parsing de XML e validação com `XMLSchema`):
+Instale as bibliotecas necessárias (`spyne`, `lxml` e `legacy-cgi`):
 
 ```powershell
-python -m pip install lxml
+python -m pip install spyne lxml legacy-cgi
 ```
 
 ### No Cliente (Java)
@@ -43,32 +43,30 @@ python -m pip install lxml
 
 ### Passo 1: Iniciar o Servidor (Terminal 1)
 
-A partir da pasta raiz `SDIS` (ou de dentro de `soap-cpf-cnpj`):
+Dentro da pasta `soap-cpf-cnpj`:
 
 ```powershell
-python soap-cpf-cnpj/server.py
+python server.py
 ```
 
 Saída esperada:
 ```text
-Servidor SOAP iniciado em http://localhost:8000/soap (WSDL: ?wsdl)
+Servidor SOAP iniciado em http://localhost:8000/soap
 ```
-
-> **Dica:** Enquanto o servidor estiver rodando, você pode abrir `http://localhost:8000/soap?wsdl` ou `http://localhost:8000/validador.xsd` no navegador para inspecionar o contrato WSDL e o XML Schema.
 
 ### Passo 2: Executar o Cliente (Terminal 2)
 
 Sintaxe:
 ```powershell
-java soap-cpf-cnpj/Client.java <CPF|CNPJ> <valor> [url]
+java Client.java <CPF|CNPJ> <valor> [url]
 ```
 
 #### Exemplos de Teste:
 
 1. **CPF Válido (com ou sem pontuação):**
    ```powershell
-   java soap-cpf-cnpj/Client.java CPF 52998224725
-   java soap-cpf-cnpj/Client.java CPF "529.982.247-25"
+   java Client.java CPF 52998224725
+   java Client.java CPF "529.982.247-25"
    ```
    Saída:
    ```text
@@ -77,7 +75,7 @@ java soap-cpf-cnpj/Client.java <CPF|CNPJ> <valor> [url]
 
 2. **CPF Inválido:**
    ```powershell
-   java soap-cpf-cnpj/Client.java CPF 11111111111
+   java Client.java CPF 11111111111
    ```
    Saída:
    ```text
@@ -86,8 +84,8 @@ java soap-cpf-cnpj/Client.java <CPF|CNPJ> <valor> [url]
 
 3. **CNPJ Válido (com ou sem pontuação):**
    ```powershell
-   java soap-cpf-cnpj/Client.java CNPJ 11222333000181
-   java soap-cpf-cnpj/Client.java CNPJ "11.222.333/0001-81"
+   java Client.java CNPJ 11222333000181
+   java Client.java CNPJ "11.222.333/0001-81"
    ```
    Saída:
    ```text
@@ -96,7 +94,7 @@ java soap-cpf-cnpj/Client.java <CPF|CNPJ> <valor> [url]
 
 4. **CNPJ Inválido:**
    ```powershell
-   java soap-cpf-cnpj/Client.java CNPJ 11222333000199
+   java Client.java CNPJ 11222333000199
    ```
    Saída:
    ```text
@@ -106,7 +104,7 @@ java soap-cpf-cnpj/Client.java <CPF|CNPJ> <valor> [url]
 5. **Teste de Violação do XML Schema (XSD):**
    Caso passe um tipo de documento fora da enumeração permitida pelo `validador.xsd` (`CPF` ou `CNPJ`), a validação XSD barra a requisição imediatamente:
    ```powershell
-   java soap-cpf-cnpj/Client.java RG 123456789
+   java Client.java RG 123456789
    ```
    Saída (exceção `SAXParseException` do validador XSD):
    ```text

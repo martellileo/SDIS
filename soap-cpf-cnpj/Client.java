@@ -11,11 +11,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class Client {
-    private static final String SOAP_NS = "http://schemas.xmlsoap.org/soap/envelope/";
     private static final String TNS = "http://sdis.ifsp.edu.br/validador";
 
     public static void main(String[] args) throws Exception {
@@ -27,10 +25,8 @@ public class Client {
         String val = args[1];
         String url = args.length > 2 ? args[2] : "http://localhost:8000/soap";
 
-        File xsdFile = new File("validador.xsd");
-        if (!xsdFile.exists()) xsdFile = new File("soap-cpf-cnpj/validador.xsd");
         Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
-                .newSchema(xsdFile);
+                .newSchema(new File("validador.xsd"));
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
 
@@ -44,7 +40,7 @@ public class Client {
         schema.newValidator().validate(new DOMSource(reqDoc));
 
         String soapEnvelope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<soap:Envelope xmlns:soap=\"" + SOAP_NS + "\">"
+                + "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
                 + "<soap:Body>" + reqPayload + "</soap:Body>"
                 + "</soap:Envelope>";
 
@@ -59,14 +55,7 @@ public class Client {
                 .send(request, HttpResponse.BodyHandlers.ofString());
 
         Document respDoc = dbf.newDocumentBuilder().parse(new InputSource(new StringReader(response.body())));
-        NodeList faults = respDoc.getElementsByTagNameNS(SOAP_NS, "Fault");
-        if (faults.getLength() > 0) {
-            System.err.println("SOAP Fault: " + faults.item(0).getTextContent());
-            return;
-        }
-
         Element respElem = (Element) respDoc.getElementsByTagNameNS(TNS, "ValidarDocumentoResponse").item(0);
-        // Valida resposta contra o XSD ao receber
         schema.newValidator().validate(new DOMSource(respElem));
 
         String msg = respElem.getElementsByTagNameNS(TNS, "message").item(0).getTextContent();
